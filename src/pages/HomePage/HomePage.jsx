@@ -1,16 +1,13 @@
 import { useState, useEffect } from "react";
 import { ReactComponent as MoonIcon } from "../../assets/svg/moon.svg";
 import { ReactComponent as SunIcon } from "../../assets/svg/sun.svg";
-import { ReactComponent as ComlpletedIcon } from "../../assets/svg/arror-correct.svg";
-import { ReactComponent as CLoseIcon } from "../../assets/svg/close.svg";
 
-import Item from "../../components/Item";
-import MyList from "../../components/List/MyList";
-import { MyItemList } from "../../assets/data/data";
+import TodoItem from "../../components/TodoItem";
 
 const HomePage = () => {
   const [theme, setTheme] = useState("light");
   const [newLists, setNewList] = useState([]);
+  const [activityValue, setActivityValue] = useState("");
 
   const handleThemeSwitch = () => {
     const html = document.querySelector("html");
@@ -26,6 +23,19 @@ const HomePage = () => {
     }
   };
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    setNewList((prevS) => [
+      ...prevS,
+      {
+        activity: activityValue,
+        active: false,
+      },
+    ]);
+  };
+
+  const handleDelete = () => {};
+
   const newArraylist = (itm) => {
     setNewList((prevS) => ({
       ...prevS,
@@ -33,7 +43,7 @@ const HomePage = () => {
     }));
   };
 
-  console.log({ newLists });
+  console.log("Before Return: ", newLists);
 
   return (
     <>
@@ -52,7 +62,26 @@ const HomePage = () => {
             </div>
           </div>
           <section className="container mt-[2rem]">
-            <Item newArraylist={newArraylist} />
+            <form onSubmit={handleClick}>
+              <div className="bg-white rounded-lg p-[1rem_2rem] flex items-center justify-between">
+                <div className="flex items-center gap-6">
+                  <div>
+                    <p className="h-[30px] w-[30px] rounded-full border-2 border-gray-300 bg-white"></p>
+                  </div>
+                  <div>
+                    <input
+                      className="p-[10px] border-none outline-none bg-transparent"
+                      type="text"
+                      name=""
+                      placeholder="Create a new todo..."
+                      onChange={(e) => setActivityValue(e.target.value)}
+                      value={activityValue}
+                    />
+                  </div>
+                  <button type="submit"></button>
+                </div>
+              </div>
+            </form>
           </section>
         </div>
       </div>
@@ -60,30 +89,16 @@ const HomePage = () => {
       <div className="-mt-[4rem]">
         <div className="w-full lg:w-3/5 mx-auto">
           <section className="container space-y-1">
-            <MyList />
-            {newLists?.item?.map(({ activity, active }, idx) => (
+            {newLists?.map(({ activity, active }, idx) => (
               <div
                 className="bg-white rounded-lg p-[1rem_2rem] flex items-center justify-between shadow-md"
                 key={idx}
               >
-                <div className="flex items-center gap-6">
-                  {Boolean(active) ? (
-                    <div>
-                      <div className="relative h-[30px] w-[30px] rounded-full bg-gradient-to-r from-[#ac2debb3] to-[#5596ffb3] items-center dark:bg-gradient-to-r dark:from-[#3710bdb3] dark:to-[#a42395b3]">
-                        <ComlpletedIcon className="w-[60px] h-[60px] absolute top-[35%] left-[35%]" />
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="h-[30px] w-[30px] rounded-full border-2 border-gray-300 "></p>
-                    </div>
-                  )}
-
-                  <div>{activity}</div>
-                </div>
-                <div>
-                  <CLoseIcon className="scale-150 cursor-pointer" />
-                </div>
+                <TodoItem
+                  active={active}
+                  activity={activity}
+                  handleDelete={handleDelete}
+                />
               </div>
             ))}
           </section>

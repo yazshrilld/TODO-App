@@ -1,4 +1,4 @@
-const ItemList.jsx = () => {
+const ItemList = () => {
   return (
     <div>ItemList.jsx</div>
   )
