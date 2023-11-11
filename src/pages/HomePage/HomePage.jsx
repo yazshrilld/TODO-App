@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ReactComponent as MoonIcon } from "../../assets/svg/moon.svg";
 import { ReactComponent as SunIcon } from "../../assets/svg/sun.svg";
-
+import { v4 as uuid } from "uuid";
 import TodoItem from "../../components/TodoItem";
 
 const HomePage = () => {
@@ -28,19 +28,19 @@ const HomePage = () => {
     setNewList((prevS) => [
       ...prevS,
       {
+        id: crypto.randomUUID(),
         activity: activityValue,
         active: false,
       },
     ]);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = (my_id) => {
+    const index  = newLists.findIndex(({id}) => id === my_id )
+    console.log({index})
 
-  const newArraylist = (itm) => {
-    setNewList((prevS) => ({
-      ...prevS,
-      item: itm,
-    }));
+    const itemsLeft = newLists.filter(({id}) => id !== my_id )
+    setNewList(itemsLeft)
   };
 
   console.log("Before Return: ", newLists);
@@ -89,7 +89,7 @@ const HomePage = () => {
       <div className="-mt-[4rem]">
         <div className="w-full lg:w-3/5 mx-auto">
           <section className="container space-y-1">
-            {newLists?.map(({ activity, active }, idx) => (
+            {newLists?.map(({ activity, active, id }, idx) => (
               <div
                 className="bg-white rounded-lg p-[1rem_2rem] flex items-center justify-between shadow-md"
                 key={idx}
@@ -97,7 +97,7 @@ const HomePage = () => {
                 <TodoItem
                   active={active}
                   activity={activity}
-                  handleDelete={handleDelete}
+                  handleDelete={() => handleDelete(id)}
                 />
               </div>
             ))}
