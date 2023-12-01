@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ReactComponent as MoonIcon } from "../../assets/svg/moon.svg";
 import { ReactComponent as SunIcon } from "../../assets/svg/sun.svg";
-import { v4 as uuid } from "uuid";
 import TodoItem from "../../components/TodoItem";
 
 const HomePage = () => {
@@ -33,17 +32,38 @@ const HomePage = () => {
         active: false,
       },
     ]);
+
+    setActivityValue("");
   };
 
   const handleDelete = (my_id) => {
-    const index  = newLists.findIndex(({id}) => id === my_id )
-    console.log({index})
-
-    const itemsLeft = newLists.filter(({id}) => id !== my_id )
-    setNewList(itemsLeft)
+    const itemsLeft = newLists.filter(({ id }) => id !== my_id);
+    setNewList(itemsLeft);
   };
 
-  console.log("Before Return: ", newLists);
+  const myClick = (my_id, active) => {
+    const index = newLists.findIndex(({ id }) => id === my_id);
+    console.log("From Index: ", newLists[index].active);
+    if(index >= 0) {
+      setNewList((prevS) => {
+        prevS.splice(index, 1, {...prevS[index], active: true})
+        return [...prevS]
+      });
+    }
+  };
+
+  const myClickFalse = (my_id) => {
+    const index = newLists.findIndex(({ id }) => id === my_id);
+    console.log("From Index: ", newLists[index].active);
+    if(index >= 0) {
+      setNewList((prevS) => {
+        prevS.splice(index, 1, {...prevS[index], active: false})
+        return [...prevS]
+      });
+    }
+  };
+
+  console.log({ newLists });
 
   return (
     <>
@@ -94,10 +114,14 @@ const HomePage = () => {
                 className="bg-white rounded-lg p-[1rem_2rem] flex items-center justify-between shadow-md"
                 key={idx}
               >
+                {
+                  console.log({active})
+                }
                 <TodoItem
                   active={active}
                   activity={activity}
                   handleDelete={() => handleDelete(id)}
+                  handleActive={active ? () => myClickFalse(id) : () => myClick(id)}
                 />
               </div>
             ))}
@@ -110,17 +134,17 @@ const HomePage = () => {
           <div className="bg-white rounded-lg p-[1rem_2rem] shadow-md flex items-center justify-evenly">
             <div>
               <p className="text-sm font-thin text-gray-800">{`${
-                newLists?.item?.length ?? "no"
+                newLists?.length ?? "no"
               } items left`}</p>
             </div>
             <div>
-              <p className="cursor-pointer">All</p>
+              <button className="cursor-pointer">All</button>
             </div>
             <div>
-              <p className="cursor-pointer">Active</p>
+              <button className="cursor-pointer">Active</button>
             </div>
             <div>
-              <p className="cursor-pointer">Completed</p>
+              <button className="cursor-pointer">Completed</button>
             </div>
           </div>
         </section>
