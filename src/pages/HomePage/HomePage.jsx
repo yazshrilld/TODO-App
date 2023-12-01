@@ -42,28 +42,21 @@ const HomePage = () => {
   };
 
   const myClick = (my_id, active) => {
-    if (active === false) {
-      const index = newLists.findIndex(({ id }) => id === my_id);
-      if (index >= 0) {
-        setNewList((prevS) => {
-          prevS.splice(index, 1, { ...prevS[index], active: true });
-          return [...prevS];
-        });
-      }
-    } else {
-      const index = newLists.findIndex(({ id }) => id === my_id);
-      if (index >= 0) {
-        setNewList((prevS) => {
-          prevS.splice(index, 1, { ...prevS[index], active: false });
-          return [...prevS];
-        });
-      }
+    const index = newLists.findIndex(({ id }) => id === my_id);
+    if (index >= 0) {
+      active
+        ? setNewList((prevS) => {
+            prevS.splice(index, 1, { ...prevS[index], active: false });
+            return [...prevS];
+          })
+        : setNewList((prevS) => {
+            prevS.splice(index, 1, { ...prevS[index], active: true });
+            return [...prevS];
+          });
     }
   };
 
-  //SEEEEEEEEE HOW I FINALLY SOLVED MY PROBLEMS, I NOW KNOW HOW TO USE REUEASBLE FUNCTIONSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-
-  console.log({ newLists });
+  const myActions = (all, active, completed) => {};
 
   return (
     <>
@@ -71,7 +64,7 @@ const HomePage = () => {
         <div className="w-full lg:w-3/5 mx-auto">
           <div className="container flex items-center justify-between pt-[1rem] lg:pt-[3rem]">
             <h1 className="text-[40px] text-white font-semibold tracking-[15px]">
-              TODO
+              PAXIPAY
             </h1>
             <div className="cursor-pointer">
               {theme === "light" ? (
