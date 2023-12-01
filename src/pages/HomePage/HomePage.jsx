@@ -42,26 +42,26 @@ const HomePage = () => {
   };
 
   const myClick = (my_id, active) => {
-    const index = newLists.findIndex(({ id }) => id === my_id);
-    console.log("From Index: ", newLists[index].active);
-    if(index >= 0) {
-      setNewList((prevS) => {
-        prevS.splice(index, 1, {...prevS[index], active: true})
-        return [...prevS]
-      });
+    if (active === false) {
+      const index = newLists.findIndex(({ id }) => id === my_id);
+      if (index >= 0) {
+        setNewList((prevS) => {
+          prevS.splice(index, 1, { ...prevS[index], active: true });
+          return [...prevS];
+        });
+      }
+    } else {
+      const index = newLists.findIndex(({ id }) => id === my_id);
+      if (index >= 0) {
+        setNewList((prevS) => {
+          prevS.splice(index, 1, { ...prevS[index], active: false });
+          return [...prevS];
+        });
+      }
     }
   };
 
-  const myClickFalse = (my_id) => {
-    const index = newLists.findIndex(({ id }) => id === my_id);
-    console.log("From Index: ", newLists[index].active);
-    if(index >= 0) {
-      setNewList((prevS) => {
-        prevS.splice(index, 1, {...prevS[index], active: false})
-        return [...prevS]
-      });
-    }
-  };
+  //SEEEEEEEEE HOW I FINALLY SOLVED MY PROBLEMS, I NOW KNOW HOW TO USE REUEASBLE FUNCTIONSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
 
   console.log({ newLists });
 
@@ -114,14 +114,12 @@ const HomePage = () => {
                 className="bg-white rounded-lg p-[1rem_2rem] flex items-center justify-between shadow-md"
                 key={idx}
               >
-                {
-                  console.log({active})
-                }
+                {console.log({ active })}
                 <TodoItem
                   active={active}
                   activity={activity}
                   handleDelete={() => handleDelete(id)}
-                  handleActive={active ? () => myClickFalse(id) : () => myClick(id)}
+                  handleActive={() => myClick(id, active)}
                 />
               </div>
             ))}
